@@ -115,7 +115,7 @@ Consider the hints: {msg_hint}
     let git_commit_command_for_display = format!(r#"git commit -m "{}""#,  Color::Green.paint(&commit_msg));
 
     if Confirm::new().with_prompt(git_commit_command_for_display).default(true).interact()? {
-        Command::new("git").arg("commit").arg(format!("-m \"{}\"", commit_msg)).output().unwrap();
+        Command::new("git").arg("commit").arg(format!("-m {}", commit_msg)).output().unwrap();
     } else {
         println!("nevermind then :(");
     }
