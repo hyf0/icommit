@@ -1,7 +1,9 @@
 [package]
-name = "igc"
-version = "0.1.0"
+name = "icommit"
+version = "0.0.1"
 edition = "2021"
+license = "GPL-3.0-only"
+description = "Generate commit message using AI"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

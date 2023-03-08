@@ -5,17 +5,14 @@ use http::Request;
 use hyper::{Body, Client};
 use serde_json::{json, Value};
 
-
-
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-
     let token = "Yeah. Should be a token here";
     let args = std::env::args().collect::<Vec<_>>();
     let msg_hint = args.get(1);
     use hyper_tls::HttpsConnector;
-    let mut prompt = format!("
+    let mut prompt = format!(
+        "
 Generate a message of git commit with obeying following descriptions.
 
 Obey following listed rules.
@@ -25,20 +22,23 @@ Obey following listed rules.
 - The message is written in English
 - The message should follow specification of conventional commits
 - Your reply should only contains the message
-");
+"
+    );
 
-if let Some(msg_hint) = msg_hint {
-    prompt.push_str(&format!("
+    if let Some(msg_hint) = msg_hint {
+        prompt.push_str(&format!(
+            "
 Consider the hints: {msg_hint}
 
 Consider changed files listed below
 
 - Cargo.toml
 - main.rs
-"))
-}
+"
+        ))
+    }
 
-println!("prompt: {prompt}");
+    println!("prompt: {prompt}");
     let https = HttpsConnector::new();
     let client = Client::builder().build::<_, hyper::Body>(https);
 
@@ -71,7 +71,11 @@ println!("prompt: {prompt}");
     let buf = String::from_utf8(buf.to_vec()).unwrap();
     let v: Value = serde_json::from_str(&buf).unwrap();
 
-    let commit_msg = v["choices"][0]["message"]["content"].as_str().unwrap().trim().to_string();
+    let commit_msg = v["choices"][0]["message"]["content"]
+        .as_str()
+        .unwrap()
+        .trim()
+        .to_string();
 
     println!("commit_msg: {commit_msg}");
 
