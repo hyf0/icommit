@@ -1,5 +1,7 @@
-use std::error::Error;
+use std::{error::Error, fmt::format};
+use ansi_term::Color;
 
+use dialoguer::Confirm;
 use http::Request;
 
 use hyper::{Body, Client};
@@ -69,6 +71,7 @@ Consider changed files listed below
     // Concatenate the body stream into a single buffer...
     let buf = hyper::body::to_bytes(res).await?;
     let buf = String::from_utf8(buf.to_vec()).unwrap();
+    println!("buf: {buf:?}");
     let v: Value = serde_json::from_str(&buf).unwrap();
 
     let commit_msg = v["choices"][0]["message"]["content"]
@@ -76,6 +79,12 @@ Consider changed files listed below
         .unwrap()
         .trim()
         .to_string();
+    let command = format!(r#"git commit -m "{commit_msg}""#);
+    if Confirm::new().with_prompt(format!("Press enter to run `{}`", Color::Green.paint(command))).default(true).interact()? {
+        println!("Looks like you want to continue");
+    } else {
+        println!("nevermind then :(");
+    }
 
     println!("commit_msg: {commit_msg}");
 
