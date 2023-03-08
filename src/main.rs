@@ -96,12 +96,9 @@ Consider the hints: {msg_hint}
         ))
         .unwrap();
 
-    // Make a GET /ip to 'http://httpbin.org'
     let res = client.request(request).await?;
 
-    // And then, if the request gets a response...
 
-    // Concatenate the body stream into a single buffer...
     let buf = hyper::body::to_bytes(res).await?;
     let buf = String::from_utf8(buf.to_vec()).unwrap();
     if verbose {
@@ -114,7 +111,6 @@ Consider the hints: {msg_hint}
         .unwrap()
         .trim()
         .to_string();
-    let command = format!(r#"git commit -m "{commit_msg}""#);
 
     let git_commit_command_for_display = format!(r#"git commit -m "{}""#,  Color::Green.paint(&commit_msg));
 
