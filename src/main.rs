@@ -106,9 +106,7 @@ Consider the hints: {msg_hint}
 
     let buf = hyper::body::to_bytes(res).await?;
     let buf = String::from_utf8(buf.to_vec()).unwrap();
-    if verbose {
-        println!("buf: {buf:?}");
-    }
+    println!("response: {}", buf);
     let v: Value = serde_json::from_str(&buf).unwrap();
 
     let commit_msg = v["choices"][0]["message"]["content"]
