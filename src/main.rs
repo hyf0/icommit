@@ -1,6 +1,9 @@
+mod config;
+
 use std::{borrow::Cow, process::Command};
 
 use ansi_term::Color;
+use config::Config;
 use hyper_tls::HttpsConnector;
 
 
@@ -35,7 +38,9 @@ async fn main() -> Result<()> {
         Err(anyhow::format_err!("No staged files founded"))?
     }
 
-    let token = std::env::var("ICOMMIT_TOKEN")?;
+    let config  = Config::read()?;
+
+    let token = config.token;
     let args = std::env::args().collect::<Vec<_>>();
     let msg_hint = args.get(1);
 
